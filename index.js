@@ -60,9 +60,9 @@ app.use("/api/conversation", conversationRoute);
 app.use("/api/message", messageRoute);
 app.use("/api/comment", commentRoute);
 
-app.get("/", (req, res) => {
-  res.send("hello home page");
-});
+// app.get("/", (req, res) => {
+//   res.send("hello home page");
+// });
 
 app.get("/pritam", (req, res) => {
   res.send("hello pritam page");
