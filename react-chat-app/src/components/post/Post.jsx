@@ -30,14 +30,18 @@ function Post({ post }) {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await axios.get(`/users?userId=${post.userId}`);
+      const res = await axios.get(
+        `http://localhost:4000/api/users?userId=${post.userId}`
+      );
       setuser(res.data);
       console.log(res);
     };
     fetchUser();
 
     const fetchComments = async () => {
-      const res = await axios.get("/comment/" + post._id);
+      const res = await axios.get(
+        "http://localhost:4000/api/comment/" + post._id
+      );
       setcomments(res.data);
     };
     fetchComments();
@@ -45,7 +49,7 @@ function Post({ post }) {
 
   const likehandler = async () => {
     try {
-      await axios.put("/posts/" + post._id + "/like", {
+      await axios.put("http://localhost:4000/api/posts/" + post._id + "/like", {
         userId: currentUser._id,
       });
     } catch (err) {}
@@ -70,7 +74,7 @@ function Post({ post }) {
     comment.current.value = "";
 
     try {
-      await axios.put("/comment", data);
+      await axios.put("http://localhost:4000/api/comment", data);
     } catch (e) {
       console.log(e);
     }

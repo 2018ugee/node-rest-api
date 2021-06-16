@@ -12,6 +12,11 @@ const messageRoute = require("./routes/message"); //import message specific rout
 const commentRoute = require("./routes/comment");
 const multer = require("multer");
 const path = require("path");
+const cors = require("cors");
+const corsOptions = {
+  origin: "http://localhost:3000",
+  optionsSuccessStatus: 200,
+};
 
 dotenv.config(); // env setup
 
@@ -30,6 +35,7 @@ mongoose.set("useCreateIndex", true);
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 // middleware
+app.use(cors(corsOptions));
 app.use(express.json()); //body parser
 app.use(helmet());
 app.use(morgan("common"));

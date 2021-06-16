@@ -34,7 +34,7 @@ function Rightbar({ user }) {
       const getFriends = async () => {
         try {
           const friendList = await axios.get(
-            "/users/friends/" + currentUser._id
+            "http://localhost:4000/api/users/friends/" + currentUser._id
           );
           setfriends(friendList.data);
         } catch (err) {
@@ -131,7 +131,9 @@ function Rightbar({ user }) {
     useEffect(() => {
       const getFriends = async () => {
         try {
-          const friendList = await axios.get("/users/friends/" + user._id);
+          const friendList = await axios.get(
+            "http://localhost:4000/api/users/friends/" + user._id
+          );
           setfriends(friendList.data);
         } catch (err) {
           console.log(err);
@@ -144,9 +146,12 @@ function Rightbar({ user }) {
       setisFetching(true);
       try {
         if (followed) {
-          await axios.put("/users/" + user._id + "/unfollow", {
-            userId: currentUser._id,
-          });
+          await axios.put(
+            "http://localhost:4000/api/users/" + user._id + "/unfollow",
+            {
+              userId: currentUser._id,
+            }
+          );
 
           currentUser.followings = currentUser.followings.filter(
             (id) => id !== user._id
@@ -156,14 +161,17 @@ function Rightbar({ user }) {
           //as state is refreshed so don't dispatch
           //   dispatch({ type: "UNFOLLOW", payload: user._id });
         } else {
-          await axios.put("/users/" + user._id + "/follow", {
-            userId: currentUser._id,
-          });
+          await axios.put(
+            "http://localhost:4000/api/users/" + user._id + "/follow",
+            {
+              userId: currentUser._id,
+            }
+          );
 
           //make new conversation if already not b/w these users
           let res = null;
           try {
-            res = await axios.post("/conversation", {
+            res = await axios.post("http://localhost:4000/api/conversation", {
               senderId: currentUser._id,
               recieverId: user._id,
             });

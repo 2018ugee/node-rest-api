@@ -33,8 +33,10 @@ function Feed({ username }) {
   useEffect(() => {
     const fetchPosts = async () => {
       const res = username
-        ? await axios.get("/posts/profile/" + username)
-        : await axios.get("posts/timeline/" + user._id);
+        ? await axios.get("http://localhost:4000/api/posts/profile/" + username)
+        : await axios.get(
+            "http://localhost:4000/apiposts/timeline/" + user._id
+          );
       setposts(
         res.data.sort((p1, p2) => {
           return new Date(p2.createdAt) - new Date(p1.createdAt);
@@ -61,11 +63,11 @@ function Feed({ username }) {
       localStorage.removeItem("user");
       localStorage.setItem("user", JSON.stringify(user));
       try {
-        await axios.put("/users/" + user._id, {
+        await axios.put("http://localhost:4000/api/users/" + user._id, {
           [changeTypeKey]: fileName,
           userId: user._id,
         });
-        await axios.post("/upload", data);
+        await axios.post("http://localhost:4000/api/upload", data);
         window.location.reload();
       } catch (err) {
         console.log(err);
@@ -100,7 +102,7 @@ function Feed({ username }) {
     localStorage.removeItem("user");
     localStorage.setItem("user", JSON.stringify(others));
     try {
-      await axios.put("/users/" + user._id, data);
+      await axios.put("http://localhost:4000/api/users/" + user._id, data);
       window.location.reload();
     } catch (err) {
       console.log(err);
