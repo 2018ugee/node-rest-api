@@ -4,8 +4,7 @@
   "description": "rest api with node js for chat-blog web app",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix react-chat-app && npm run build --prefix react-chat-app"
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
