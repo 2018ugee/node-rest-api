@@ -14,7 +14,11 @@ const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://pandsocials.herokuapp.com"],
+  origin: [
+    "https://pandsocial.netlify.app",
+    "http://localhost:3000",
+    "https://pandsocials.herokuapp.com",
+  ],
   optionsSuccessStatus: 200,
 };
 
