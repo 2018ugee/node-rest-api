@@ -13,6 +13,9 @@ const commentRoute = require("./routes/comment");
 const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
+const cloudinary = require("cloudinary").v2;
+
+//setting origins for cors.
 const corsOptions = {
   origin: [
     "https://pandsocial.netlify.app",
@@ -36,9 +39,8 @@ mongoose.set("useNewUrlParser", true);
 mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
 
-app.use("/images", express.static(path.join(__dirname, "public/images")));
-
 // middleware
+app.use("/images", express.static(path.join(__dirname, "public/images"))); //for multer fix
 app.use(cors(corsOptions));
 app.use(express.json()); //body parser
 app.use(helmet());
@@ -54,12 +56,29 @@ const storage = multer.diskStorage({
 });
 app.use(multer({ storage: storage }).single("file")); //fix for file not uploading but getting success message.
 const upload = multer(storage);
+
+// app.post("/api/upload", upload.single("file"), (req, res) => {
+//   return res.status(200).json("File uploaded successfully.");
+// });
+
+//cloudinary setup for image upload
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+  // secure: false,
+});
 app.post("/api/upload", upload.single("file"), (req, res) => {
-  try {
-    return res.status(200).json("File uploaded successfully.");
-  } catch (err) {
-    console.log(err);
-  }
+  cloudinary.uploader.upload(
+    path.join(__dirname, req.file.path),
+    { upload_preset: "my_setups", public_id: req.file.filename.split(".")[0] },
+    function (error, result) {
+      if (error) {
+        res.status(500).json("Error in uploading. Try again!");
+      }
+      res.status(200).send(result.secure_url.split("v")[1]);
+    }
+  );
 });
 
 //separate different routers
@@ -70,23 +89,19 @@ app.use("/api/conversation", conversationRoute);
 app.use("/api/message", messageRoute);
 app.use("/api/comment", commentRoute);
 
-// app.get("/", (req, res) => {
-//   res.send("hello home page");
-// });
-
 app.get("/pritam", (req, res) => {
   res.send("hello pritam page");
 });
 
 //heroku code for deploy
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("react-chat-app/build"));
-  app.get("*", (req, res) => {
-    res.sendFile(
-      path.resolve(__dirname, "react-chat-app", "build", "index.html")
-    );
-  });
-}
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static("react-chat-app/build"));
+//   app.get("*", (req, res) => {
+//     res.sendFile(
+//       path.resolve(__dirname, "react-chat-app", "build", "index.html")
+//     );
+//   });
+// }
 
 app.listen(process.env.PORT || 4000, () => {
   console.log("Backend server is running @ 4000");
