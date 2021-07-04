@@ -17,7 +17,7 @@ const cloudinary = require("cloudinary").v2;
 
 //setting origins for cors.
 const corsOptions = {
-  origin: [
+  origins: [
     "https://pandsocial.netlify.app",
     "http://localhost:3000",
     "https://pandsocials.herokuapp.com",
