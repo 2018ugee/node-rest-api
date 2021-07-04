@@ -74,9 +74,12 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
     { upload_preset: "my_setups", public_id: req.file.filename.split(".")[0] },
     function (error, result) {
       if (error) {
+        console.log(error, "error in uploading");
         res.status(500).json("Error in uploading. Try again!");
+      } else {
+        console.log(result, "upload response from cdn");
+        res.status(200).send(result.secure_url.split("v")[1]);
       }
-      res.status(200).send(result.secure_url.split("v")[1]);
     }
   );
 });
