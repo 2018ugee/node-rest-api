@@ -78,7 +78,9 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
         res.status(500).json("Error in uploading. Try again!");
       } else {
         console.log(result, "upload response from cdn");
-        res.status(200).send(result.secure_url.split("v")[1]);
+        res
+          .status(200)
+          .send(result.secure_url.substr(result.secure_url.indexOf("v") + 1));
       }
     }
   );
